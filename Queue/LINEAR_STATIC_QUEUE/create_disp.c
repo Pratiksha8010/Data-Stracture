@@ -1,29 +1,19 @@
 #include<stdio.h>
-#define max 20
-struct queue
+#include<malloc.h>
+struct node
 {
-    int data[max];
-    int front,rear;
-}*q;
+    int data;
+    struct node *next;
+}*rear,*temp,*front,*newnode;
 
 void init()
 {
-
-q->front=-1;
-q->rear=-1;
+    rear=front=NULL;
 }
 
-int isfull()
+int empty()
 {
- if(q->rear==max-1)
- return 1;
- else
- return 0;
-
-}
-int isempty()
-{
-    if(q->front==-1 || q->front> q->rear)
+    if(front==NULL)
     return 1;
     else
     return 0;
@@ -31,63 +21,58 @@ int isempty()
 
 void insert(int num)
 {
- if(isfull())
- printf("queue is  overflow.....");
- else
- {
-    if(q->front==-1)
-        q->front=0;
-    
-    q->rear++;
-    q->data[q->rear]=num;
- }
+    newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=num;
+    newnode->next=NULL;
+    if(front==NULL){
+        rear=front=newnode;
+    }
+    else{
+        rear->next=newnode;
+        rear=newnode;
+        printf("\ninsert succ...");
+    }
 }
 
-int del()
-{
-   int val;
-   val=q->data[q->front];
-     q->rear--;
-     return val;
-
+void del()
+{ int val;
+    if(empty()){
+           printf("\n queue is empty...");
+    }
+    else{
+        
+ temp=front;
+front=front->next;
+free(temp);
+printf("\n delete succe...");
+}
 }
 
 void disp()
 {
-  int i;
-  for(i=q->front;i!=q->rear;i++){
-              printf("%d",q->data[i]);
-  }
-
-      printf("%d",q->data[i]);
-
+    for(temp=front;temp!=NULL;temp=temp->next){
+        printf("%d\t",temp->data);
+    }
 }
+
 int main()
 {
-    int num;
-
-    printf("-------------------------");
-    init();
-
-    printf("-------------------------");
-printf("enter num..");
-scanf("%d",&num);
-insert(num);
-
-printf("enter num..");
-scanf("%d",&num);
-insert(num);
-
-printf("enter num..");
-scanf("%d",&num);
-insert(num);
-
-printf("enter num..");
-scanf("%d",&num);
-insert(num);
-disp();
-
-
+int ch,num;
+do
+{
+    printf("\n 1-insert\n2-delete\n3-disp\n enter choice...");
+    scanf("%d",&ch);
+    switch(ch){
+        case 1: printf("enter num to insert...");
+                  scanf("%d",&num);
+                  insert(num);
+                  break;
+        case 2: del();
+                break;
+        case 3: disp();        
+    }
+ 
+}while(ch<4);
 
     return 0;
 }
